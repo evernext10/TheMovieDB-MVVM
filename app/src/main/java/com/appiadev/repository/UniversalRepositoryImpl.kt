@@ -3,6 +3,7 @@ package com.appiadev.repository
 import android.content.Context
 import android.util.Log
 import com.appiadev.api.ServerAPI
+import com.appiadev.model.api.MovieResponse
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.NetworkManager.isOnline
 import com.appiadev.utils.handleApiError
@@ -16,10 +17,10 @@ class UniversalRepositoryImpl(
     private val context: Context
 ) : UniversalRepository {
 
-    override suspend fun getAllCountries(): AppResult<List<String>> {
+    override suspend fun getAllMovies(): AppResult<MovieResponse> {
         if (isOnline(context)) {
             return try {
-                val response = api.getAllCountries()
+                val response = api.getAllMovies()
                 if (response.isSuccessful) {
                     // save the data
                     response.body()?.let {
@@ -37,7 +38,7 @@ class UniversalRepositoryImpl(
         } else {
             // check in db if the data exists
             val data = getCountriesDataFromCache()
-            return if (data.isNotEmpty()) {
+            return if (data.movieResults!!.isNotEmpty()) {
                 Log.d("DB", "from db")
                 AppResult.Success(data)
             } else
@@ -46,10 +47,10 @@ class UniversalRepositoryImpl(
         }
     }
 
-    private suspend fun getCountriesDataFromCache(): List<String> {
+    private suspend fun getCountriesDataFromCache(): MovieResponse {
         return withContext(Dispatchers.IO) {
             // dao.findAll()
-            emptyList()
+            MovieResponse()
         }
     }
 }

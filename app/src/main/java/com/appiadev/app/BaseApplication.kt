@@ -20,7 +20,8 @@ class BaseApplication : Application() {
                 viewModelModule,
                 repositoryModule,
                 networkModule,
-                databaseModule
+                databaseModule,
+                coroutineModule
             )
         }
     }

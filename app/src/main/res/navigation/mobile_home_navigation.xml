@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home_one"
-        android:name="com.appiadev.ui.home.navigation.one.OneHomeFragment"
+        android:name="com.appiadev.ui.home.navigation.list.MovieListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_one_home">
+        tools:layout="@layout/fragment_movie_list">
 
         <action
             android:id="@+id/action_go_to_two"
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_home_two"
-        android:name="com.appiadev.ui.home.navigation.two.TwoHomeFragment"
+        android:name="com.appiadev.ui.home.navigation.detail.TwoHomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_two_home" />
 

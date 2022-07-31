@@ -1,7 +1,8 @@
 package com.appiadev.repository
 
+import com.appiadev.model.api.MovieResponse
 import com.appiadev.utils.AppResult
 
 interface UniversalRepository {
-    suspend fun getAllCountries(): AppResult<List<String>>
+    suspend fun getAllMovies(): AppResult<MovieResponse>
 }

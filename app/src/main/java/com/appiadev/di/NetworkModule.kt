@@ -1,6 +1,8 @@
 package com.appiadev.di
 
 import com.appiadev.R
+import com.appiadev.utils.Constants
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.BuildConfig.DEBUG
@@ -15,6 +17,20 @@ val networkModule = module {
     val connectTimeout: Long = 40 // 20s
     val readTimeout: Long = 40 // 20s
 
+    fun provideApiKeyInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val originalRequest = chain.request()
+            val originalUrl = originalRequest.url
+            val url = originalUrl.newBuilder()
+                .addQueryParameter("api_key", Constants().API_KEY)
+                .build()
+
+            val requestBuilder = originalRequest.newBuilder().url(url)
+            val newRequest = requestBuilder.build()
+            chain.proceed(newRequest)
+        }
+    }
+
     fun provideHttpClient(): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
             .connectTimeout(connectTimeout, TimeUnit.SECONDS)
@@ -25,6 +41,7 @@ val networkModule = module {
             }
             okHttpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
+        okHttpClientBuilder.addInterceptor(provideApiKeyInterceptor())
         okHttpClientBuilder.build()
         return okHttpClientBuilder.build()
     }

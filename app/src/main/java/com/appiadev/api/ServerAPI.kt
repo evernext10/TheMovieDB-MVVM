@@ -1,9 +1,10 @@
 package com.appiadev.api
 
+import com.appiadev.model.api.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 
 interface ServerAPI {
-    @GET("/api/v1")
-    suspend fun getAllCountries(): Response<List<String>>
+    @GET("movie/popular")
+    suspend fun getAllMovies(): Response<MovieResponse>
 }
