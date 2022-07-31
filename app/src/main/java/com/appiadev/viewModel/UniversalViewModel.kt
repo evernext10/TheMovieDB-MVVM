@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appiadev.model.api.MovieResponse
+import com.appiadev.model.api.MovieResult
+import com.appiadev.model.core.Movie
 import com.appiadev.repository.UniversalRepository
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.SingleLiveEvent
@@ -13,7 +15,7 @@ import kotlinx.coroutines.launch
 class UniversalViewModel(private val repository: UniversalRepository) : ViewModel() {
 
     val showLoading = ObservableBoolean()
-    val countriesList = MutableLiveData<MovieResponse>()
+    val movieList = MutableLiveData<List<MovieResult>>()
     val showError = SingleLiveEvent<String?>()
 
     fun getAllMovies() {
@@ -24,7 +26,7 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
             showLoading.set(false)
             when (result) {
                 is AppResult.Success -> {
-                    countriesList.value = result.successData!!
+                    movieList.postValue(result.successData.movieResults!!)
                     showError.value = null
                 }
                 is AppResult.Error -> showError.value = result.exception.message

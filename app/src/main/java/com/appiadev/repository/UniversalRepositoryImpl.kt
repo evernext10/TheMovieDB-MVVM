@@ -41,9 +41,10 @@ class UniversalRepositoryImpl(
             return if (data.movieResults!!.isNotEmpty()) {
                 Log.d("DB", "from db")
                 AppResult.Success(data)
-            } else
-            // no network
+            } else {
+                // no network
                 context.noNetworkConnectivityError()
+            }
         }
     }
 

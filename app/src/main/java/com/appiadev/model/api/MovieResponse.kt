@@ -7,7 +7,7 @@ class MovieResponse(
     @SerializedName("page")
     var page: Int? = null,
     @SerializedName("results")
-    var movieResults: List<MovieResult>? = null,
+    var movieResults: List<MovieResult>? = emptyList(),
     @SerializedName("total_pages")
     var totalPages: Int? = null,
     @SerializedName("total_results")
@@ -43,14 +43,4 @@ data class MovieResult(
     var voteAverage: Double? = null,
     @SerializedName("vote_count")
     var voteCount: Int? = null
-) {
-    fun toMovieItem(): Movie {
-        return Movie(
-            id = id,
-            title = title,
-            posterPath = posterPath,
-            voteAverage = voteAverage?.toString(),
-            voteCount = voteCount?.toString()
-        )
-    }
-}
+)
