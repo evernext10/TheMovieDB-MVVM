@@ -9,7 +9,9 @@ import com.appiadev.binding.setImageUrl
 import com.appiadev.databinding.LayoutMovieListItemBinding
 import com.appiadev.model.api.MovieResult
 
-class MovieListAdapter : ListAdapter<MovieResult, MovieListAdapter.MovieViewHolder>(MovieDiffUtil()) {
+class MovieListAdapter(
+    private val onClick: (MovieResult) -> Unit
+) : ListAdapter<MovieResult, MovieListAdapter.MovieViewHolder>(MovieDiffUtil()) {
     companion object {
         private class MovieDiffUtil : DiffUtil.ItemCallback<MovieResult>() {
             override fun areItemsTheSame(oldItem: MovieResult, newItem: MovieResult): Boolean {
@@ -28,7 +30,8 @@ class MovieListAdapter : ListAdapter<MovieResult, MovieListAdapter.MovieViewHold
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onClick
         )
     }
 
@@ -36,8 +39,16 @@ class MovieListAdapter : ListAdapter<MovieResult, MovieListAdapter.MovieViewHold
         holder.bind(getItem(position))
     }
 
-    class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding) :
+    class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding, val onClick: (MovieResult) -> Unit) :
         RecyclerView.ViewHolder(viewItem.root) {
+
+        init {
+            itemView.setOnClickListener {
+                viewItem.movie?.let {
+                    onClick(it)
+                }
+            }
+        }
 
         fun bind(movie: MovieResult) {
             viewItem.movie = movie

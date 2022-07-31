@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.appiadev.R
 import com.appiadev.binding.submitMovieItems
 import com.appiadev.databinding.FragmentMovieListBinding
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
@@ -25,7 +27,17 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMovieListBinding.inflate(inflater, container, false)
-        binding.rvMovieList.adapter = MovieListAdapter()
+        binding.rvMovieList.adapter = MovieListAdapter(onClick = {
+            findNavController().navigate(
+                R.id.action_go_to_two,
+                Bundle().apply {
+                    putParcelable(
+                        "model",
+                        it
+                    )
+                }
+            )
+        })
         return binding.root
     }
 

@@ -1,7 +1,8 @@
 package com.appiadev.model.api
 
-import com.appiadev.model.core.Movie
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 class MovieResponse(
     @SerializedName("page")
@@ -14,6 +15,7 @@ class MovieResponse(
     var totalResults: Int? = null
 )
 
+@Parcelize
 data class MovieResult(
     @SerializedName("adult")
     var adult: Boolean? = null,
@@ -43,4 +45,4 @@ data class MovieResult(
     var voteAverage: Double? = null,
     @SerializedName("vote_count")
     var voteCount: Int? = null
-)
+) : Parcelable
