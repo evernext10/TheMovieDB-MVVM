@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Appia-android-template</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="BASE_URL" />
+    <string name="no_network_connectivity">No hay internet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
