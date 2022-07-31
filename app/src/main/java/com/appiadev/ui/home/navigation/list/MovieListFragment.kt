@@ -45,13 +45,15 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAllMovies()
+        binding.progressBar.showProgressBar(true)
         launchAndRepeatWithViewLifecycle {
-            binding.progressBar.showProgressBar(false)
             viewModel.movieList.observe(viewLifecycleOwner) {
+                binding.progressBar.showProgressBar(false)
                 binding.rvMovieList.submitMovieItems(it)
             }
             viewModel.showError.observe(viewLifecycleOwner) {
                 if (it != null) {
+                    binding.progressBar.showProgressBar(false)
                     showToastMessage(it)
                 }
             }
