@@ -7,18 +7,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.appiadev.binding.setImageUrl
 import com.appiadev.databinding.LayoutMovieListItemBinding
-import com.appiadev.model.api.MovieResult
+import com.appiadev.model.api.Movie
 
 class MovieListAdapter(
-    private val onClick: (MovieResult) -> Unit
-) : ListAdapter<MovieResult, MovieListAdapter.MovieViewHolder>(MovieDiffUtil()) {
+    private val onClick: (Movie) -> Unit
+) : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffUtil()) {
     companion object {
-        private class MovieDiffUtil : DiffUtil.ItemCallback<MovieResult>() {
-            override fun areItemsTheSame(oldItem: MovieResult, newItem: MovieResult): Boolean {
+        private class MovieDiffUtil : DiffUtil.ItemCallback<Movie>() {
+            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: MovieResult, newItem: MovieResult): Boolean {
+            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
                 return oldItem == newItem
             }
         }
@@ -39,7 +39,7 @@ class MovieListAdapter(
         holder.bind(getItem(position))
     }
 
-    class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding, val onClick: (MovieResult) -> Unit) :
+    class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding, val onClick: (Movie) -> Unit) :
         RecyclerView.ViewHolder(viewItem.root) {
 
         init {
@@ -50,7 +50,7 @@ class MovieListAdapter(
             }
         }
 
-        fun bind(movie: MovieResult) {
+        fun bind(movie: Movie) {
             viewItem.movie = movie
             viewItem.ivMovie.setImageUrl(movie.posterPath)
         }

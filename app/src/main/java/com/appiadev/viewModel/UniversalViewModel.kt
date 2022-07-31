@@ -4,7 +4,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appiadev.model.api.MovieResult
+import com.appiadev.model.api.Movie
 import com.appiadev.repository.UniversalRepository
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.Constants
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class UniversalViewModel(private val repository: UniversalRepository) : ViewModel() {
 
     val showLoading = ObservableBoolean()
-    val movieList = MutableLiveData<List<MovieResult>>()
+    val movieList = MutableLiveData<List<Movie>>()
     val showError = SingleLiveEvent<String?>()
 
     fun getAllMovies() {

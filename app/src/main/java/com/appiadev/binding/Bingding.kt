@@ -3,12 +3,12 @@ package com.appiadev.binding
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.appiadev.model.api.MovieResult
+import com.appiadev.model.api.Movie
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
 import com.bumptech.glide.Glide
 
 @BindingAdapter(value = ["submitItems"])
-fun RecyclerView.submitMovieItems(movieList: List<MovieResult>?) {
+fun RecyclerView.submitMovieItems(movieList: List<Movie>?) {
     if (movieList == null || movieList.isEmpty()) return
     if (this.adapter is MovieListAdapter) {
         (this.adapter as MovieListAdapter).submitList(movieList)

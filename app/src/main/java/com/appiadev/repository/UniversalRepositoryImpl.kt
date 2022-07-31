@@ -3,7 +3,9 @@ package com.appiadev.repository
 import android.content.Context
 import android.util.Log
 import com.appiadev.api.ServerAPI
+import com.appiadev.db.daos.MovieDao
 import com.appiadev.model.api.MovieResponse
+import com.appiadev.model.api.Movie
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.NetworkManager.isOnline
 import com.appiadev.utils.handleApiError
@@ -14,18 +16,23 @@ import kotlinx.coroutines.withContext
 
 class UniversalRepositoryImpl(
     private val api: ServerAPI,
-    private val context: Context
+    private val context: Context,
+    private val movieDao: MovieDao
 ) : UniversalRepository {
 
     override suspend fun getAllMovies(): AppResult<MovieResponse> {
-        if (isOnline(context)) {
+        val hasInternet = isOnline(context)
+        if (hasInternet) {
             return try {
                 val response = api.getAllMovies()
                 if (response.isSuccessful) {
                     // save the data
                     response.body()?.let {
                         withContext(Dispatchers.IO) {
-                            // dao.add(it)
+                            it.movieResults?.let { data ->
+                                movieDao.insertMovieList(data)
+                                Log.d("DB", "Saved")
+                            }
                         }
                     }
                     handleSuccess(response)
@@ -37,10 +44,13 @@ class UniversalRepositoryImpl(
             }
         } else {
             // check in db if the data exists
-            val data = getCountriesDataFromCache()
-            return if (data.movieResults!!.isNotEmpty()) {
+            val data = getMoviesDataFromCache()
+            return if (data.isNotEmpty()) {
                 Log.d("DB", "from db")
-                AppResult.Success(data)
+                val result = MovieResponse(
+                    movieResults = data
+                )
+                AppResult.Success(result)
             } else {
                 // no network
                 context.noNetworkConnectivityError()
@@ -48,10 +58,9 @@ class UniversalRepositoryImpl(
         }
     }
 
-    private suspend fun getCountriesDataFromCache(): MovieResponse {
+    private suspend fun getMoviesDataFromCache(): List<Movie> {
         return withContext(Dispatchers.IO) {
-            // dao.findAll()
-            MovieResponse()
+            movieDao.findAll()
         }
     }
 }

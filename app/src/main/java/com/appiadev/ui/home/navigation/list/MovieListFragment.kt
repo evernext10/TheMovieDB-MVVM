@@ -10,6 +10,7 @@ import com.appiadev.R
 import com.appiadev.binding.submitMovieItems
 import com.appiadev.databinding.FragmentMovieListBinding
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
+import com.appiadev.utils.NetworkManager
 import com.appiadev.utils.launchAndRepeatWithViewLifecycle
 import com.appiadev.utils.showProgressBar
 import com.appiadev.utils.showToastMessage

@@ -3,6 +3,7 @@ package com.appiadev.di
 import android.app.Application
 import androidx.room.Room
 import com.appiadev.db.AppDatabase
+import com.appiadev.db.daos.MovieDao
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
@@ -14,10 +15,10 @@ val databaseModule = module {
             .build()
     }
 
-    /*fun provideCountriesDao(database: AppDatabase): CountriesDao {
-        return  database.countriesDao
-    }*/
+    fun provideMoviesDao(database: AppDatabase): MovieDao {
+        return database.movieDao()
+    }
 
     single { provideDatabase(androidApplication()) }
-    // single { provideCountriesDao(get()) }
+    single { provideMoviesDao(get()) }
 }

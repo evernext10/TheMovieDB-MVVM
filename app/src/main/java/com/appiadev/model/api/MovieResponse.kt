@@ -1,6 +1,7 @@
 package com.appiadev.model.api
 
 import android.os.Parcelable
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -8,7 +9,7 @@ class MovieResponse(
     @SerializedName("page")
     var page: Int? = null,
     @SerializedName("results")
-    var movieResults: List<MovieResult>? = emptyList(),
+    var movieResults: List<Movie>? = emptyList(),
     @SerializedName("total_pages")
     var totalPages: Int? = null,
     @SerializedName("total_results")
@@ -16,7 +17,8 @@ class MovieResponse(
 )
 
 @Parcelize
-data class MovieResult(
+@Entity(primaryKeys = [("id")])
+data class Movie(
     @SerializedName("adult")
     var adult: Boolean? = null,
     @SerializedName("backdrop_path")
