@@ -2,8 +2,8 @@ package com.appiadev.ui.home.navigation.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.appiadev.binding.setImageUrl
 import com.appiadev.databinding.LayoutMovieListItemBinding
@@ -11,7 +11,8 @@ import com.appiadev.model.api.Movie
 
 class MovieListAdapter(
     private val onClick: (Movie) -> Unit
-) : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffUtil()) {
+) : PagingDataAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffUtil()) {
+
     companion object {
         private class MovieDiffUtil : DiffUtil.ItemCallback<Movie>() {
             override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
@@ -36,7 +37,7 @@ class MovieListAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 
     class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding, val onClick: (Movie) -> Unit) :

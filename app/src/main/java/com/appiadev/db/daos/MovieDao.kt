@@ -1,5 +1,6 @@
 package com.appiadev.db.daos
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.appiadev.model.api.Movie
 
@@ -16,4 +17,10 @@ interface MovieDao {
 
     @Query("SELECT * FROM MOVIE")
     fun findAll(): List<Movie>
+
+    @Query("DELETE FROM MOVIE")
+    suspend fun clearAllPopularMovies()
+
+    @Query("SELECT * FROM MOVIE")
+    fun moviesPagingSource(): PagingSource<Int, Movie>
 }
