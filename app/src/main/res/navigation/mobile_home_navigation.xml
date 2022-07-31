@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_home_one"
         android:name="com.appiadev.ui.home.navigation.list.MovieListFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_movie_list"
         tools:layout="@layout/fragment_movie_list">
 
         <action
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_home_two"
         android:name="com.appiadev.ui.home.navigation.detail.MovieDetailFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_movie_detail"
         tools:layout="@layout/fragment_movie_detail" />
 
 </navigation>

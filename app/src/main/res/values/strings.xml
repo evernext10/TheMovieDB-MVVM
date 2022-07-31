@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">TheMovieDB</string>
-    <string name="title_home">Movies</string>
-    <string name="title_notifications">Favoritos</string>
+    <string name="title_movie_list">Peliculas</string>
+    <string name="title_movie_detail">Información de la pelicula</string>
+    <string name="title_favorites">Favoritos</string>
 
     <string name="BASE_URL">https://api.themoviedb.org/3/</string>
 
