@@ -1,7 +1,6 @@
 package com.appiadev.ui.home.navigation.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import com.appiadev.databinding.FragmentMovieListBinding
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
 import com.appiadev.utils.launchAndRepeatWithViewLifecycle
 import com.appiadev.utils.showProgressBar
+import com.appiadev.utils.showToastMessage
 import com.appiadev.viewModel.UniversalViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -36,6 +36,11 @@ class MovieListFragment : Fragment() {
             binding.progressBar.showProgressBar(false)
             viewModel.movieList.observe(viewLifecycleOwner) {
                 binding.rvMovieList.submitMovieItems(it)
+            }
+            viewModel.showError.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    showToastMessage(it)
+                }
             }
         }
     }
