@@ -4,11 +4,10 @@ import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appiadev.model.api.MovieResponse
 import com.appiadev.model.api.MovieResult
-import com.appiadev.model.core.Movie
 import com.appiadev.repository.UniversalRepository
 import com.appiadev.utils.AppResult
+import com.appiadev.utils.Constants
 import com.appiadev.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
@@ -26,6 +25,9 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
             showLoading.set(false)
             when (result) {
                 is AppResult.Success -> {
+                    result.successData.movieResults!!.forEach {
+                        it.posterPath = Constants().BASE_POSTER_PATH + it.posterPath
+                    }
                     movieList.postValue(result.successData.movieResults!!)
                     showError.value = null
                 }
