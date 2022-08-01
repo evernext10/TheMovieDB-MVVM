@@ -22,7 +22,7 @@ class UniversalViewModelTest {
         viewModel = UniversalViewModel(
             FakeMovieRepository()
         ).apply {
-            this.getAllMovies()
+            this.getAllMovies(page = 1)
         }
 
         val movieList = viewModel.movieList.value

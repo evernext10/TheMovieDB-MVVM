@@ -15,7 +15,7 @@ class FakeMovieRepository : UniversalRepository {
         this.isToThrowException = isToThrowException
     }
 
-    override suspend fun getAllMovies(): AppResult<MovieResponse> {
+    override suspend fun getAllMovies(page: Int): AppResult<MovieResponse> {
         if (isToThrowException) throw Exception("Network Error")
         val apiResponse = TestData.movieApiModel1
 

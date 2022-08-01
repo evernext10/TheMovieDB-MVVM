@@ -20,11 +20,11 @@ class UniversalRepositoryImpl(
     private val movieDao: MovieDao
 ) : UniversalRepository {
 
-    override suspend fun getAllMovies(): AppResult<MovieResponse> {
+    override suspend fun getAllMovies(page: Int): AppResult<MovieResponse> {
         val hasInternet = isOnline(context)
         if (hasInternet) {
             return try {
-                val response = api.getAllMovies()
+                val response = api.getAllMovies(page)
                 if (response.isSuccessful) {
                     // save the data
                     response.body()?.let {

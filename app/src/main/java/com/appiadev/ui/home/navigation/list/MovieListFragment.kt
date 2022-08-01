@@ -9,8 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.appiadev.R
 import com.appiadev.binding.submitMovieItems
 import com.appiadev.databinding.FragmentMovieListBinding
+import com.appiadev.pagging.RecyclerViewPaginator
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
-import com.appiadev.utils.NetworkManager
 import com.appiadev.utils.launchAndRepeatWithViewLifecycle
 import com.appiadev.utils.showProgressBar
 import com.appiadev.utils.showToastMessage
@@ -39,12 +39,23 @@ class MovieListFragment : Fragment() {
                 }
             )
         })
+        RecyclerViewPaginator(
+            recyclerView = binding.rvMovieList,
+            isLoading = { viewModel.showLoading.get() },
+            loadMore = { loadMore(it) },
+            onLast = { false }
+        ).apply {
+            threshold = 4
+            currentPage = 1
+        }
         return binding.root
     }
 
+    private fun loadMore(page: Int) = this.viewModel.postMoviePage(page)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllMovies()
+        loadMore(page = 1)
         binding.progressBar.showProgressBar(true)
         launchAndRepeatWithViewLifecycle {
             viewModel.movieList.observe(viewLifecycleOwner) {

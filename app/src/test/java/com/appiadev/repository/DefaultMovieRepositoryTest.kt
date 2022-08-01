@@ -6,7 +6,6 @@ import com.appiadev.api.ServerAPI
 import com.appiadev.runBlockingTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +27,7 @@ class DefaultMovieRepositoryTest {
 
     @Before
     fun setup() = coroutineRule.runBlockingTest {
-        Mockito.`when`(movieService.getAllMovies()).thenReturn(Response.success(TestData.movieApiModel1))
+        Mockito.`when`(movieService.getAllMovies(page)).thenReturn(Response.success(TestData.movieApiModel1))
     }
 
     @Test
