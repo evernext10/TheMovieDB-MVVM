@@ -35,18 +35,25 @@ class UniversalRepositoryImpl(
         return fetchMoviesByType(MovieType.Trends, page)
     }
 
-    override suspend fun getRecommendedMovies(page: Int): AppResult<MovieResponse> {
-        return fetchMoviesByType(MovieType.Recommended, page)
+    override suspend fun getRecommendedMovies(
+        filterType: String,
+        page: Int
+    ): AppResult<MovieResponse> {
+        return fetchMoviesByType(MovieType.Recommended, page, filterType)
     }
 
-    private suspend fun fetchMoviesByType(type: MovieType, page: Int): AppResult<MovieResponse> {
+    private suspend fun fetchMoviesByType(type: MovieType, page: Int, filterType: String? = null): AppResult<MovieResponse> {
         val hasInternet = isOnline(context)
         if (hasInternet) {
             return try {
                 val response = when (type) {
                     is MovieType.Upcoming -> api.getUpcoming(page)
                     is MovieType.Trends -> api.getTrends(page)
-                    is MovieType.Recommended -> api.getRecommended(page)
+                    is MovieType.Recommended -> when(filterType){
+                        "language" -> api.getRecommendedByLanguage(page)
+                        "year" -> api.getRecommendedByYear(page)
+                        else -> api.getRecommended(page)
+                    }
                 }
 
                 if (response.isSuccessful) {

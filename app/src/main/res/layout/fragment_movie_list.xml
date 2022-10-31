@@ -74,16 +74,23 @@
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.chip.ChipGroup
+                app:singleLine="true"
+                app:singleSelection="true"
+                android:id="@+id/filter_recommended_movies_chips_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.chip.Chip
-                    android:text="En español"
+                    android:id="@+id/filter_language"
+                    android:text="Español"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <com.google.android.material.chip.Chip
-                    android:text="Lanzadas en 1993"
+                    android:id="@+id/filter_year"
+                    android:text="2021"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

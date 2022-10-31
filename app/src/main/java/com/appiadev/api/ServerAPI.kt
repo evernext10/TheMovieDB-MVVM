@@ -13,5 +13,20 @@ interface ServerAPI {
     suspend fun getTrends(@Query("page") page: Int): Response<MovieResponse>
 
     @GET("movie/top_rated")
-    suspend fun getRecommended(@Query("page") page: Int): Response<MovieResponse>
+    suspend fun getRecommended(
+        @Query("page") page: Int
+    ): Response<MovieResponse>
+
+    @GET("movie/top_rated")
+    suspend fun getRecommendedByLanguage(
+        @Query("page") page: Int,
+        @Query("language") language: String = "es"
+    ): Response<MovieResponse>
+
+    @GET("movie/top_rated")
+    suspend fun getRecommendedByYear(
+        @Query("page") page: Int,
+        @Query("primary_release_date.gte") yearStart: String = "2021-01-01",
+        @Query("primary_release_date.lte") yearEnd: String = "2021-12-31"
+    ): Response<MovieResponse>
 }

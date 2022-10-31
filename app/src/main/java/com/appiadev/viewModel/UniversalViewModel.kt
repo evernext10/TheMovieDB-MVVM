@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appiadev.model.core.MovieFilterType
+import com.appiadev.model.core.MovieType
 import com.appiadev.model.core.State
 import com.appiadev.repository.UniversalRepository
 import com.appiadev.utils.AppResult
@@ -33,15 +35,15 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
 
     init {
         this.upcomingMoviePageLiveData.observeForever {
-            getUpcomingMovies(it)
+            getMoviesByTypeAndPage(MovieType.Upcoming, _upcomingMovieList, it)
         }
 
         this.trendsMoviePageLiveData.observeForever {
-            getUpcomingMovies(it)
+            getMoviesByTypeAndPage(MovieType.Trends, _trendsMovieList, it)
         }
 
         this.recommendedMoviePageLiveData.observeForever {
-            getUpcomingMovies(it)
+            getMoviesByTypeAndPage(MovieType.Recommended, _recommendedMovieList, it)
         }
     }
 
@@ -49,22 +51,47 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
     fun postTrendsMoviePage(page: Int) = trendsMoviePageLiveData.postValue(page)
     fun postRecommendedMoviePage(page: Int) = recommendedMoviePageLiveData.postValue(page)
 
-    private fun getUpcomingMovies(page: Int) {
+    fun getRecommendedMoviesByFilter(
+        filter: MovieFilterType
+    ) {
+        getMoviesByTypeAndPage(
+            MovieType.Recommended,
+            _recommendedMovieList,
+            recommendedMoviePageLiveData.value ?: 1,
+            filter
+        )
+    }
+    private fun getMoviesByTypeAndPage(
+        type: MovieType,
+        _state: MutableLiveData<State>,
+        page: Int,
+        filterType: MovieFilterType? = null
+    ) {
         showLoading.set(true)
         viewModelScope.launch {
-            val result = repository.getUpcomingMovies(page)
-
+            val result = when (type) {
+                MovieType.Upcoming -> repository.getUpcomingMovies(page)
+                MovieType.Trends -> repository.getTrendsMovies(page)
+                else -> when (filterType) {
+                    is MovieFilterType.Language -> {
+                        repository.getRecommendedMovies("language", page)
+                    }
+                    else -> {
+                        repository.getRecommendedMovies("year", page)
+                    }
+                }
+            }
             showLoading.set(false)
             when (result) {
                 is AppResult.Success -> {
                     result.successData.movieResults!!.forEach {
                         it.posterPath = Constants().BASE_POSTER_PATH + it.posterPath
                     }
-                    _upcomingMovieList.postValue(State.Success(result.successData.movieResults!!))
+                    _state.postValue(State.Success(result.successData.movieResults!!))
                     showError.value = null
                 }
                 is AppResult.Error -> {
-                    _upcomingMovieList.postValue(State.Error)
+                    _state.postValue(State.Error)
                     showError.value = result.exception.message
                 }
             }
