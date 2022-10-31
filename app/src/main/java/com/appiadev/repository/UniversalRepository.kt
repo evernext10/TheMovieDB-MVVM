@@ -4,5 +4,7 @@ import com.appiadev.model.api.MovieResponse
 import com.appiadev.utils.AppResult
 
 interface UniversalRepository {
-    suspend fun getAllMovies(page: Int): AppResult<MovieResponse>
+    suspend fun getUpcomingMovies(page: Int): AppResult<MovieResponse>
+    suspend fun getTrendsMovies(page: Int): AppResult<MovieResponse>
+    suspend fun getRecommendedMovies(page: Int): AppResult<MovieResponse>
 }

@@ -46,5 +46,7 @@ data class Movie(
     @SerializedName("vote_average")
     var voteAverage: Double? = null,
     @SerializedName("vote_count")
-    var voteCount: Int? = null
+    var voteCount: Int? = null,
+    @SerializedName("type")
+    var type: String? = null
 ) : Parcelable

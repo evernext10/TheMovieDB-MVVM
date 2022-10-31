@@ -1,11 +1,11 @@
 package com.appiadev.viewModel
 
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import com.appiadev.model.api.Movie
+import com.appiadev.model.core.State
 import com.appiadev.repository.UniversalRepository
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.Constants
@@ -15,21 +15,44 @@ import kotlinx.coroutines.launch
 class UniversalViewModel(private val repository: UniversalRepository) : ViewModel() {
 
     val showLoading = ObservableBoolean()
-    var movieList = MutableLiveData<List<Movie>>()
+
+    private val _upcomingMovieList = MutableLiveData<State>()
+    val upcomingMovieList: LiveData<State> = _upcomingMovieList
+
+    private val _trendsMovieList = MutableLiveData<State>()
+    val trendsMovieList: LiveData<State> = _trendsMovieList
+
+    private val _recommendedMovieList = MutableLiveData<State>()
+    val recommendedMovieList: LiveData<State> = _recommendedMovieList
+
     val showError = SingleLiveEvent<String?>()
 
-    private var moviePageLiveData: MutableLiveData<Int> = MutableLiveData()
+    private var upcomingMoviePageLiveData: MutableLiveData<Int> = MutableLiveData()
+    private var trendsMoviePageLiveData: MutableLiveData<Int> = MutableLiveData()
+    private var recommendedMoviePageLiveData: MutableLiveData<Int> = MutableLiveData()
 
     init {
-        this.moviePageLiveData.observeForever {
-            getAllMovies(it)
+        this.upcomingMoviePageLiveData.observeForever {
+            getUpcomingMovies(it)
+        }
+
+        this.trendsMoviePageLiveData.observeForever {
+            getUpcomingMovies(it)
+        }
+
+        this.recommendedMoviePageLiveData.observeForever {
+            getUpcomingMovies(it)
         }
     }
 
-    fun getAllMovies(page: Int) {
+    fun postUpcomingMoviePage(page: Int) = upcomingMoviePageLiveData.postValue(page)
+    fun postTrendsMoviePage(page: Int) = trendsMoviePageLiveData.postValue(page)
+    fun postRecommendedMoviePage(page: Int) = recommendedMoviePageLiveData.postValue(page)
+
+    private fun getUpcomingMovies(page: Int) {
         showLoading.set(true)
         viewModelScope.launch {
-            val result = repository.getAllMovies(page)
+            val result = repository.getUpcomingMovies(page)
 
             showLoading.set(false)
             when (result) {
@@ -37,13 +60,14 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
                     result.successData.movieResults!!.forEach {
                         it.posterPath = Constants().BASE_POSTER_PATH + it.posterPath
                     }
-                    movieList.postValue(result.successData.movieResults!!)
+                    _upcomingMovieList.postValue(State.Success(result.successData.movieResults!!))
                     showError.value = null
                 }
-                is AppResult.Error -> showError.value = result.exception.message
+                is AppResult.Error -> {
+                    _upcomingMovieList.postValue(State.Error)
+                    showError.value = result.exception.message
+                }
             }
         }
     }
-
-    fun postMoviePage(page: Int) = moviePageLiveData.postValue(page)
 }

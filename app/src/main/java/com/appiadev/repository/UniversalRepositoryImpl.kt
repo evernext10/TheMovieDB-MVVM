@@ -4,8 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.appiadev.api.ServerAPI
 import com.appiadev.db.daos.MovieDao
-import com.appiadev.model.api.MovieResponse
 import com.appiadev.model.api.Movie
+import com.appiadev.model.api.MovieResponse
+import com.appiadev.model.core.MovieType
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.NetworkManager.isOnline
 import com.appiadev.utils.handleApiError
@@ -20,16 +21,41 @@ class UniversalRepositoryImpl(
     private val movieDao: MovieDao
 ) : UniversalRepository {
 
-    override suspend fun getAllMovies(page: Int): AppResult<MovieResponse> {
+    private suspend fun getMoviesDataFromCache(type: String): List<Movie> {
+        return withContext(Dispatchers.IO) {
+            movieDao.findAllMoviesByType(type)
+        }
+    }
+
+    override suspend fun getUpcomingMovies(page: Int): AppResult<MovieResponse> {
+        return fetchMoviesByType(MovieType.Upcoming, page)
+    }
+
+    override suspend fun getTrendsMovies(page: Int): AppResult<MovieResponse> {
+        return fetchMoviesByType(MovieType.Trends, page)
+    }
+
+    override suspend fun getRecommendedMovies(page: Int): AppResult<MovieResponse> {
+        return fetchMoviesByType(MovieType.Recommended, page)
+    }
+
+    private suspend fun fetchMoviesByType(type: MovieType, page: Int): AppResult<MovieResponse> {
         val hasInternet = isOnline(context)
         if (hasInternet) {
             return try {
-                val response = api.getAllMovies(page)
+                val response = when (type) {
+                    is MovieType.Upcoming -> api.getUpcoming(page)
+                    is MovieType.Trends -> api.getTrends(page)
+                    is MovieType.Recommended -> api.getRecommended(page)
+                }
+
                 if (response.isSuccessful) {
                     // save the data
                     response.body()?.let {
                         withContext(Dispatchers.IO) {
                             it.movieResults?.let { data ->
+                                data.forEach { it.type = type::class.simpleName }
+
                                 movieDao.insertMovieList(data)
                                 Log.d("DB", "Saved")
                             }
@@ -44,8 +70,8 @@ class UniversalRepositoryImpl(
             }
         } else {
             // check in db if the data exists
-            val data = getMoviesDataFromCache()
-            return if (data.isNotEmpty()) {
+            val data = type::class.simpleName?.let { getMoviesDataFromCache(it) }
+            return if (data?.isNotEmpty() == true) {
                 Log.d("DB", "from db")
                 val result = MovieResponse(
                     movieResults = data
@@ -55,12 +81,6 @@ class UniversalRepositoryImpl(
                 // no network
                 context.noNetworkConnectivityError()
             }
-        }
-    }
-
-    private suspend fun getMoviesDataFromCache(): List<Movie> {
-        return withContext(Dispatchers.IO) {
-            movieDao.findAll()
         }
     }
 }

@@ -14,6 +14,6 @@ interface MovieDao {
     @Query("SELECT * FROM MOVIE WHERE id = :id_")
     fun getMovie(id_: Int): Movie
 
-    @Query("SELECT * FROM MOVIE")
-    fun findAll(): List<Movie>
+    @Query("SELECT * FROM MOVIE WHERE type = :type_")
+    fun findAllMoviesByType(type_: String): List<Movie>
 }
