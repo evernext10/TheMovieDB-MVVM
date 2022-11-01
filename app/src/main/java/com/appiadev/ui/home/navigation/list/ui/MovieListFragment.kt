@@ -13,9 +13,10 @@ import com.appiadev.databinding.FragmentMovieListBinding
 import com.appiadev.model.core.MovieFilterType
 import com.appiadev.model.core.states.StateMovieList
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
-import com.appiadev.utils.launchAndRepeatWithViewLifecycle
-import com.appiadev.utils.showToastMessage
 import com.appiadev.ui.home.navigation.list.viewModel.MovieListViewModel
+import com.appiadev.utils.launchAndRepeatWithViewLifecycle
+import com.appiadev.utils.showAlertDialogErrorApi
+import com.appiadev.utils.showToastMessage
 import com.google.android.material.chip.Chip
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -98,6 +99,9 @@ class MovieListFragment : Fragment() {
                         // binding.progressBar.showProgressBar(false)
                         binding.recyclerUpcoming.submitMovieItems(it.movies)
                     }
+                    is StateMovieList.Error -> {
+                        showAlertDialogErrorApi(findNavController())
+                    }
                     else -> {}
                 }
             }
@@ -110,6 +114,9 @@ class MovieListFragment : Fragment() {
                         // binding.progressBar.showProgressBar(false)
                         binding.recyclerTrends.submitMovieItems(it.movies)
                     }
+                    is StateMovieList.Error -> {
+                        showAlertDialogErrorApi(findNavController())
+                    }
                     else -> {}
                 }
             }
@@ -121,6 +128,9 @@ class MovieListFragment : Fragment() {
                     is StateMovieList.Success -> {
                         // binding.progressBar.showProgressBar(false)
                         binding.recyclerRecommended.submitMovieItems(it.movies.subList(0, 6))
+                    }
+                    is StateMovieList.Error -> {
+                        showAlertDialogErrorApi(findNavController())
                     }
                     else -> {}
                 }

@@ -48,4 +48,24 @@ class MovieDetailViewModel(private val repository: MovieDetailRepository) : View
             }
         }
     }
+
+    fun getMovieTrailerById(
+        id: Int
+    ) {
+        showLoading.set(true)
+        viewModelScope.launch {
+            val result = repository.getMovieTrailer(id)
+            showLoading.set(false)
+            when (result) {
+                is AppResult.Success -> {
+                    _movieVideos.postValue(StateMovieVideos.Success(result.successData))
+                    showError.value = null
+                }
+                is AppResult.Error -> {
+                    _movieVideos.postValue(StateMovieVideos.Error)
+                    showError.value = result.exception.message
+                }
+            }
+        }
+    }
 }

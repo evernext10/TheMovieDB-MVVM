@@ -13,7 +13,6 @@ class MovieVideosResponse(
 )
 
 @Parcelize
-@Entity(primaryKeys = [("id")])
 data class Video(
     @SerializedName("name")
     var name: String? = null,

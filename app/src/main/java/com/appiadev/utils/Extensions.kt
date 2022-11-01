@@ -1,6 +1,9 @@
 package com.appiadev.utils
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -11,7 +14,9 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
 import com.appiadev.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -73,4 +78,23 @@ inline fun Fragment.launchAndRepeatWithViewLifecycle(
 
 fun Fragment.showToastMessage(message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.showAlertDialogErrorApi(controller: NavController) {
+    MaterialAlertDialogBuilder(this.requireContext())
+        .setCancelable(false)
+        .setTitle(this.resources.getString(R.string.error_api_generic_title))
+        .setMessage(this.resources.getString(R.string.error_api_generic_message))
+        .setPositiveButton(android.R.string.ok) { dialog, _ ->
+            dialog.dismiss()
+            controller.popBackStack()
+        }.show()
+}
+
+fun Fragment.openFirstTrailerOnYoutube(key: String) {
+    try {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$key")))
+    } catch (e: ActivityNotFoundException) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=$key")))
+    }
 }

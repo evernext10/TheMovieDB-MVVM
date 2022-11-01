@@ -6,6 +6,8 @@ import com.appiadev.api.ServerAPI
 import com.appiadev.db.daos.MovieDao
 import com.appiadev.model.api.Movie
 import com.appiadev.model.api.MovieResponse
+import com.appiadev.model.api.MovieVideosResponse
+import com.appiadev.model.api.Video
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.NetworkManager.isOnline
 import com.appiadev.utils.handleApiError
@@ -53,7 +55,26 @@ class MovieDetailRepositoryImpl(
         }
     }
 
-    override suspend fun getMovieTrailer(id: Int): AppResult<MovieResponse> {
-        TODO("Not yet implemented")
+    override suspend fun getMovieTrailer(id: Int): AppResult<MovieVideosResponse> {
+        val hasInternet = isOnline(context)
+        if (hasInternet) {
+            return try {
+                val response = api.getMovieVideos(id.toString())
+                if (response.isSuccessful) {
+                    handleSuccess(response)
+                } else {
+                    handleApiError(response)
+                }
+            } catch (e: Exception) {
+                AppResult.Error(e)
+            }
+        } else {
+            // check in db if the data exists
+            val result = MovieVideosResponse(
+                results = listOf()
+            )
+            Log.d("DB", "from db")
+            return AppResult.Success(result)
+        }
     }
 }

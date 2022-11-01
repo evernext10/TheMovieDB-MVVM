@@ -84,17 +84,21 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/year_text"
+                        android:backgroundTint="@android:color/darker_gray"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="20dp"
+                        android:textColor="@color/black"
                         tools:text="2013"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/language_text"
+                        android:backgroundTint="@android:color/darker_gray"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:paddingHorizontal="20dp"
+                        android:textColor="@color/black"
                         tools:text="en"/>
 
                     <com.google.android.material.button.MaterialButton
@@ -103,9 +107,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:backgroundTint="@color/yellow"
-                        android:paddingLeft="2dp"
                         android:paddingRight="8dp"
                         android:drawableLeft="@drawable/ic_star"
+                        android:textColor="@color/black"
                         tools:text="2.0"/>
                 </LinearLayout>
 
@@ -128,6 +132,7 @@
                     android:text="@string/watch_trailer"
                     android:padding="16dp"
                     android:gravity="center"
+                    android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -163,6 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="@string/movie_plot"
+                    android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/plotOverview"
@@ -170,6 +176,7 @@
                     android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/plotOverview"
+                    android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
