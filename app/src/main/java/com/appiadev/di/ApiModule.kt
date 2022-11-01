@@ -6,8 +6,8 @@ import retrofit2.Retrofit
 
 val apiModule = module {
 
-    fun provideCountriesApi(retrofit: Retrofit): ServerAPI {
+    fun provideMoviesApi(retrofit: Retrofit): ServerAPI {
         return retrofit.create(ServerAPI::class.java)
     }
-    single { provideCountriesApi(get()) }
+    single { provideMoviesApi(get()) }
 }
