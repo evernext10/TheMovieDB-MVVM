@@ -2,12 +2,12 @@ package com.appiadev.fakes
 
 import com.appiadev.TestData
 import com.appiadev.model.api.MovieResponse
-import com.appiadev.repository.UniversalRepository
+import com.appiadev.ui.home.navigation.list.repository.MovieListRepository
 import com.appiadev.utils.AppResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FakeMovieRepository : UniversalRepository {
+class FakeMovieRepository : MovieListRepository {
 
     private var isToThrowException: Boolean = false
 

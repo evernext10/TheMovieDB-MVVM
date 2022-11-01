@@ -1,4 +1,4 @@
-package com.appiadev.viewModel
+package com.appiadev.ui.home.navigation.list.viewModel
 
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
@@ -7,25 +7,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appiadev.model.core.MovieFilterType
 import com.appiadev.model.core.MovieType
-import com.appiadev.model.core.State
-import com.appiadev.repository.UniversalRepository
+import com.appiadev.model.core.states.StateMovieList
+import com.appiadev.ui.home.navigation.list.repository.MovieListRepository
 import com.appiadev.utils.AppResult
 import com.appiadev.utils.Constants
 import com.appiadev.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
-class UniversalViewModel(private val repository: UniversalRepository) : ViewModel() {
+class MovieListViewModel(private val repository: MovieListRepository) : ViewModel() {
 
     val showLoading = ObservableBoolean()
 
-    private val _upcomingMovieList = MutableLiveData<State>()
-    val upcomingMovieList: LiveData<State> = _upcomingMovieList
+    private val _upcomingMovieList = MutableLiveData<StateMovieList>()
+    val upcomingMovieList: LiveData<StateMovieList> = _upcomingMovieList
 
-    private val _trendsMovieList = MutableLiveData<State>()
-    val trendsMovieList: LiveData<State> = _trendsMovieList
+    private val _trendsMovieList = MutableLiveData<StateMovieList>()
+    val trendsMovieList: LiveData<StateMovieList> = _trendsMovieList
 
-    private val _recommendedMovieList = MutableLiveData<State>()
-    val recommendedMovieList: LiveData<State> = _recommendedMovieList
+    private val _recommendedMovieList = MutableLiveData<StateMovieList>()
+    val recommendedMovieList: LiveData<StateMovieList> = _recommendedMovieList
 
     val showError = SingleLiveEvent<String?>()
 
@@ -63,7 +63,7 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
     }
     private fun getMoviesByTypeAndPage(
         type: MovieType,
-        _state: MutableLiveData<State>,
+        _state: MutableLiveData<StateMovieList>,
         page: Int,
         filterType: MovieFilterType? = null
     ) {
@@ -87,11 +87,11 @@ class UniversalViewModel(private val repository: UniversalRepository) : ViewMode
                     result.successData.movieResults!!.forEach {
                         it.posterPath = Constants().BASE_POSTER_PATH + it.posterPath
                     }
-                    _state.postValue(State.Success(result.successData.movieResults!!))
+                    _state.postValue(StateMovieList.Success(result.successData.movieResults!!))
                     showError.value = null
                 }
                 is AppResult.Error -> {
-                    _state.postValue(State.Error)
+                    _state.postValue(StateMovieList.Error)
                     showError.value = result.exception.message
                 }
             }

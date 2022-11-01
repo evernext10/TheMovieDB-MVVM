@@ -1,4 +1,4 @@
-package com.appiadev.repository
+package com.appiadev.ui.home.navigation.list.repository
 
 import android.content.Context
 import android.util.Log
@@ -15,11 +15,11 @@ import com.appiadev.utils.noNetworkConnectivityError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class UniversalRepositoryImpl(
+class MovieListRepositoryImpl(
     private val api: ServerAPI,
     private val context: Context,
     private val movieDao: MovieDao
-) : UniversalRepository {
+) : MovieListRepository {
 
     private suspend fun getMoviesDataFromCache(type: String): List<Movie> {
         return withContext(Dispatchers.IO) {

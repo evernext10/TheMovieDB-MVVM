@@ -1,4 +1,4 @@
-package com.appiadev.ui.home.navigation.list
+package com.appiadev.ui.home.navigation.list.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,18 +11,18 @@ import com.appiadev.R
 import com.appiadev.binding.submitMovieItems
 import com.appiadev.databinding.FragmentMovieListBinding
 import com.appiadev.model.core.MovieFilterType
-import com.appiadev.model.core.State
+import com.appiadev.model.core.states.StateMovieList
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
 import com.appiadev.utils.launchAndRepeatWithViewLifecycle
 import com.appiadev.utils.showToastMessage
-import com.appiadev.viewModel.UniversalViewModel
+import com.appiadev.ui.home.navigation.list.viewModel.MovieListViewModel
 import com.google.android.material.chip.Chip
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieListFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieListBinding
-    private val viewModel by viewModel<UniversalViewModel>()
+    private val viewModel by viewModel<MovieListViewModel>()
     private var chipChecked: Chip? = null
 
     private val adapterUpcoming: MovieListAdapter by lazy {
@@ -84,15 +84,17 @@ class MovieListFragment : Fragment() {
         loadMoreUpcoming(page = 1)
         loadMoreTrends(page = 1)
         loadMoreRecommended(page = 1)
+        observerState()
+    }
 
-        // binding.progressBar.showProgressBar(true)
+    private fun observerState() {
         launchAndRepeatWithViewLifecycle {
             viewModel.upcomingMovieList.observe(viewLifecycleOwner) {
                 when (it) {
-                    is State.Loading -> {
+                    is StateMovieList.Loading -> {
                         // binding.progressBar.showProgressBar(true)
                     }
-                    is State.Success -> {
+                    is StateMovieList.Success -> {
                         // binding.progressBar.showProgressBar(false)
                         binding.recyclerUpcoming.submitMovieItems(it.movies)
                     }
@@ -101,10 +103,10 @@ class MovieListFragment : Fragment() {
             }
             viewModel.trendsMovieList.observe(viewLifecycleOwner) {
                 when (it) {
-                    is State.Loading -> {
+                    is StateMovieList.Loading -> {
                         // binding.progressBar.showProgressBar(true)
                     }
-                    is State.Success -> {
+                    is StateMovieList.Success -> {
                         // binding.progressBar.showProgressBar(false)
                         binding.recyclerTrends.submitMovieItems(it.movies)
                     }
@@ -113,10 +115,10 @@ class MovieListFragment : Fragment() {
             }
             viewModel.recommendedMovieList.observe(viewLifecycleOwner) {
                 when (it) {
-                    is State.Loading -> {
+                    is StateMovieList.Loading -> {
                         // binding.progressBar.showProgressBar(true)
                     }
-                    is State.Success -> {
+                    is StateMovieList.Success -> {
                         // binding.progressBar.showProgressBar(false)
                         binding.recyclerRecommended.submitMovieItems(it.movies.subList(0, 6))
                     }

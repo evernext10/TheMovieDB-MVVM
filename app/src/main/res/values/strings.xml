@@ -13,4 +13,7 @@
     <string name="movie_release_date">Movie Release Date</string>
     <string name="movie_rating">Movie Rating</string>
 
+    <string name="watch_trailer">Ver trailer</string>
+    <string name="movie_plot">MOVIE PLOT</string>
+
 </resources>

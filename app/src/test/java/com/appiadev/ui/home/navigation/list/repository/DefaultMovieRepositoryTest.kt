@@ -1,4 +1,4 @@
-package com.appiadev.repository
+package com.appiadev.ui.home.navigation.list.repository
 
 import com.appiadev.MainCoroutineRule
 import com.appiadev.TestData
