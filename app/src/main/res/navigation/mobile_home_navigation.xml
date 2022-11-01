@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home_one"
-        android:name="com.appiadev.ui.home.navigation.list.MovieListFragment"
+        android:name="com.appiadev.ui.home.navigation.list.ui.MovieListFragment"
         android:label="@string/title_movie_list"
         tools:layout="@layout/fragment_movie_list">
 
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_home_two"
-        android:name="com.appiadev.ui.home.navigation.detail.MovieDetailFragment"
+        android:name="com.appiadev.ui.home.navigation.detail.ui.MovieDetailFragment"
         android:label="@string/title_movie_detail"
         tools:layout="@layout/fragment_movie_detail" />
 

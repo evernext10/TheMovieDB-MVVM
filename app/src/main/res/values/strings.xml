@@ -13,4 +13,10 @@
     <string name="movie_release_date">Movie Release Date</string>
     <string name="movie_rating">Movie Rating</string>
 
+    <string name="watch_trailer">Ver trailer</string>
+    <string name="movie_plot">MOVIE PLOT</string>
+
+    <string name="error_api_generic_title">Lo sentimos</string>
+    <string name="error_api_generic_message">La API de The Movie DB esta presentando fallas. Intenta nuevamente en un rato.</string>
+
 </resources>

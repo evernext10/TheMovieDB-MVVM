@@ -42,17 +42,12 @@ class MovieListAdapter(
     class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding, val onClick: (Movie) -> Unit) :
         RecyclerView.ViewHolder(viewItem.root) {
 
-        init {
-            itemView.setOnClickListener {
-                viewItem.movie?.let {
-                    onClick(it)
-                }
-            }
-        }
 
         fun bind(movie: Movie) {
-            viewItem.movie = movie
             viewItem.ivMovie.setImageUrl(movie.posterPath)
+            itemView.setOnClickListener {
+                onClick(movie)
+            }
         }
     }
 }
