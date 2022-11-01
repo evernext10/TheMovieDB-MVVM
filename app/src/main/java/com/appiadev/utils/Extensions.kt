@@ -1,5 +1,7 @@
 package com.appiadev.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -96,5 +98,22 @@ fun Fragment.openFirstTrailerOnYoutube(key: String) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$key")))
     } catch (e: ActivityNotFoundException) {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=$key")))
+    }
+}
+
+fun View.visible(isVisible: Boolean, isWithAnimation: Boolean = false) {
+    val currentAlpha = alpha
+    if (!isVisible && isWithAnimation) {
+        animate()
+            .alpha(0f)
+            .setDuration(1500L)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    visibility = View.GONE
+                    alpha = currentAlpha
+                }
+            })
+    } else {
+        visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 }

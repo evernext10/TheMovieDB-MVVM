@@ -17,6 +17,7 @@ import com.appiadev.ui.home.navigation.detail.viewModel.MovieDetailViewModel
 import com.appiadev.utils.launchAndRepeatWithViewLifecycle
 import com.appiadev.utils.openFirstTrailerOnYoutube
 import com.appiadev.utils.showAlertDialogErrorApi
+import com.appiadev.utils.visible
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
@@ -64,6 +65,8 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
                     }
                     is StateMovieVideos.Unauthorized -> {}
                     is StateMovieVideos.Error -> {
+                        binding.labelSeeTrailer.visible(false)
+                        binding.seeTrailerButton.visible(false)
                         showAlertDialogErrorApi(findNavController())
                     }
                 }
