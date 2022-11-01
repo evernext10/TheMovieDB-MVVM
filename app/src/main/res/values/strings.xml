@@ -3,6 +3,7 @@
     <string name="title_movie_list">Peliculas</string>
     <string name="title_movie_detail">Información de la pelicula</string>
     <string name="title_favorites">Favoritos</string>
+    <string name="title_splash">Splash</string>
 
     <string name="BASE_URL">https://api.themoviedb.org/3/</string>
 
@@ -18,5 +19,7 @@
 
     <string name="error_api_generic_title">Lo sentimos</string>
     <string name="error_api_generic_message">La API de The Movie DB esta presentando fallas. Intenta nuevamente en un rato.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
