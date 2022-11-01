@@ -42,7 +42,6 @@ class MovieListAdapter(
     class MovieViewHolder(private val viewItem: LayoutMovieListItemBinding, val onClick: (Movie) -> Unit) :
         RecyclerView.ViewHolder(viewItem.root) {
 
-
         fun bind(movie: Movie) {
             viewItem.ivMovie.setImageUrl(movie.posterPath)
             itemView.setOnClickListener {

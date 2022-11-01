@@ -1,6 +1,7 @@
 package com.appiadev.ui.home.navigation.list.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.appiadev.R
 import com.appiadev.binding.submitMovieItems
 import com.appiadev.databinding.FragmentMovieListBinding
+import com.appiadev.model.api.Movie
 import com.appiadev.model.core.MovieFilterType
 import com.appiadev.model.core.states.StateMovieList
 import com.appiadev.ui.home.navigation.list.adapter.MovieListAdapter
@@ -28,42 +30,30 @@ class MovieListFragment : Fragment() {
 
     private val adapterUpcoming: MovieListAdapter by lazy {
         MovieListAdapter(onClick = {
-            findNavController().navigate(
-                R.id.action_go_to_two,
-                Bundle().apply {
-                    putParcelable(
-                        "model",
-                        it
-                    )
-                }
-            )
+            navigateToMovieDetail(it)
         })
     }
     private val adapterTrends: MovieListAdapter by lazy {
         MovieListAdapter(onClick = {
-            findNavController().navigate(
-                R.id.action_go_to_two,
-                Bundle().apply {
-                    putParcelable(
-                        "model",
-                        it
-                    )
-                }
-            )
+            navigateToMovieDetail(it)
         })
     }
     private val adapterRecommended: MovieListAdapter by lazy {
         MovieListAdapter(onClick = {
-            findNavController().navigate(
-                R.id.action_go_to_two,
-                Bundle().apply {
-                    putParcelable(
-                        "model",
-                        it
-                    )
-                }
-            )
+            navigateToMovieDetail(it)
         })
+    }
+
+    private fun navigateToMovieDetail(movie: Movie) {
+        findNavController().navigate(
+            R.id.action_go_to_two,
+            Bundle().apply {
+                putParcelable(
+                    "model",
+                    movie
+                )
+            }
+        )
     }
 
     override fun onCreateView(
@@ -93,13 +83,14 @@ class MovieListFragment : Fragment() {
             viewModel.upcomingMovieList.observe(viewLifecycleOwner) {
                 when (it) {
                     is StateMovieList.Loading -> {
-                        // binding.progressBar.showProgressBar(true)
+                        Log.i("upcomingMovieList", "Loading")
                     }
                     is StateMovieList.Success -> {
-                        // binding.progressBar.showProgressBar(false)
+                        Log.i("upcomingMovieList", "Success")
                         binding.recyclerUpcoming.submitMovieItems(it.movies)
                     }
                     is StateMovieList.Error -> {
+                        Log.e("upcomingMovieList", "Error")
                         showAlertDialogErrorApi(findNavController())
                     }
                     else -> {}
@@ -108,13 +99,14 @@ class MovieListFragment : Fragment() {
             viewModel.trendsMovieList.observe(viewLifecycleOwner) {
                 when (it) {
                     is StateMovieList.Loading -> {
-                        // binding.progressBar.showProgressBar(true)
+                        Log.i("trendsMovieList", "Loading")
                     }
                     is StateMovieList.Success -> {
-                        // binding.progressBar.showProgressBar(false)
+                        Log.i("trendsMovieList", "Success")
                         binding.recyclerTrends.submitMovieItems(it.movies)
                     }
                     is StateMovieList.Error -> {
+                        Log.e("trendsMovieList", "Error")
                         showAlertDialogErrorApi(findNavController())
                     }
                     else -> {}
@@ -123,13 +115,14 @@ class MovieListFragment : Fragment() {
             viewModel.recommendedMovieList.observe(viewLifecycleOwner) {
                 when (it) {
                     is StateMovieList.Loading -> {
-                        // binding.progressBar.showProgressBar(true)
+                        Log.i("recommendedMovieList", "Loading")
                     }
                     is StateMovieList.Success -> {
-                        // binding.progressBar.showProgressBar(false)
+                        Log.i("recommendedMovieList", "Success")
                         binding.recyclerRecommended.submitMovieItems(it.movies.subList(0, 6))
                     }
                     is StateMovieList.Error -> {
+                        Log.e("recommendedMovieList", "Error")
                         showAlertDialogErrorApi(findNavController())
                     }
                     else -> {}
@@ -137,7 +130,6 @@ class MovieListFragment : Fragment() {
             }
             viewModel.showError.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    // binding.progressBar.showProgressBar(false)
                     showToastMessage(it)
                 }
             }

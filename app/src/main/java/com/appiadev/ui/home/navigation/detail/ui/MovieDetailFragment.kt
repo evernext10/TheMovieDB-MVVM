@@ -1,6 +1,7 @@
 package com.appiadev.ui.home.navigation.detail.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,24 +48,32 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
         launchAndRepeatWithViewLifecycle {
             viewModel.movieDetail.observe(viewLifecycleOwner) {
                 when (it) {
-                    is StateMovieDetail.Loading -> {}
+                    is StateMovieDetail.Loading -> {
+                        Log.i("movieDetail", "Loading")
+                    }
                     is StateMovieDetail.Success -> {
+                        Log.i("upcomingMovieList", "Success")
                         setDetailInformationToViews(it.movie)
                     }
                     is StateMovieDetail.Unauthorized -> {}
                     is StateMovieDetail.Error -> {
+                        Log.i("upcomingMovieList", "Error")
                         showAlertDialogErrorApi(findNavController())
                     }
                 }
             }
             viewModel.movieVideos.observe(viewLifecycleOwner) {
                 when (it) {
-                    is StateMovieVideos.Loading -> {}
+                    is StateMovieVideos.Loading -> {
+                        Log.i("movieDetail", "Loading")
+                    }
                     is StateMovieVideos.Success -> {
+                        Log.i("movieVideos", "Success")
                         setTrailerButtonData(it.response.results)
                     }
                     is StateMovieVideos.Unauthorized -> {}
                     is StateMovieVideos.Error -> {
+                        Log.i("movieVideos", "Error")
                         binding.labelSeeTrailer.visible(false)
                         binding.seeTrailerButton.visible(false)
                         showAlertDialogErrorApi(findNavController())
