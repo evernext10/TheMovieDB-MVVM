@@ -1,9 +1,9 @@
 package com.appiadev.di
 
+import android.content.Context
 import com.appiadev.R
 import com.appiadev.utils.Constants
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.BuildConfig.DEBUG
 import org.koin.android.ext.koin.androidContext
@@ -11,6 +11,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
@@ -31,7 +32,26 @@ val networkModule = module {
         }
     }
 
-    fun provideHttpClient(): OkHttpClient {
+    fun provideOfflineCacheInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            try {
+                return@Interceptor chain.proceed(chain.request())
+            } catch (e: Exception) {
+                val cacheControl = CacheControl.Builder()
+                    .onlyIfCached()
+                    .maxStale(1, TimeUnit.DAYS)
+                    .build()
+                val offlineRequest: Request = chain.request().newBuilder()
+                    .cacheControl(cacheControl)
+                    .removeHeader("Pragma")
+                    .build()
+                return@Interceptor chain.proceed(offlineRequest)
+            }
+        }
+    }
+
+    fun provideHttpClient(context: Context): OkHttpClient {
+        val httpCacheDirectory = File(context.cacheDir, "offlineCache")
         val okHttpClientBuilder = OkHttpClient.Builder()
             .connectTimeout(connectTimeout, TimeUnit.SECONDS)
             .readTimeout(readTimeout, TimeUnit.SECONDS)
@@ -41,7 +61,9 @@ val networkModule = module {
             }
             okHttpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
+        okHttpClientBuilder.cache(Cache(httpCacheDirectory, 10 * 1024 * 1024))
         okHttpClientBuilder.addInterceptor(provideApiKeyInterceptor())
+        okHttpClientBuilder.addInterceptor(provideOfflineCacheInterceptor())
         okHttpClientBuilder.build()
         return okHttpClientBuilder.build()
     }
@@ -55,7 +77,7 @@ val networkModule = module {
             .build()
     }
 
-    single { provideHttpClient() }
+    single { provideHttpClient(get()) }
     single {
         val baseUrl = androidContext().getString(R.string.BASE_URL)
         provideRetrofit(get(), baseUrl)

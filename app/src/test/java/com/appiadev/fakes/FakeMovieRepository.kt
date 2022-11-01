@@ -15,7 +15,44 @@ class FakeMovieRepository : MovieListRepository {
         this.isToThrowException = isToThrowException
     }
 
-    override suspend fun getAllMovies(page: Int): AppResult<MovieResponse> {
+    override suspend fun getUpcomingMovies(page: Int): AppResult<MovieResponse> {
+        if (isToThrowException) throw Exception("Network Error")
+        val apiResponse = TestData.movieApiModel1
+
+        return if (apiResponse.movieResults!!.isNotEmpty()) {
+            // save the data
+            apiResponse.let {
+                withContext(Dispatchers.IO) {
+                    it.movieResults?.let { data -> }
+                }
+            }
+            AppResult.Success(apiResponse)
+        } else {
+            AppResult.Error(Exception("No data Error"))
+        }
+    }
+
+    override suspend fun getTrendsMovies(page: Int): AppResult<MovieResponse> {
+        if (isToThrowException) throw Exception("Network Error")
+        val apiResponse = TestData.movieApiModel1
+
+        return if (apiResponse.movieResults!!.isNotEmpty()) {
+            // save the data
+            apiResponse.let {
+                withContext(Dispatchers.IO) {
+                    it.movieResults?.let { data -> }
+                }
+            }
+            AppResult.Success(apiResponse)
+        } else {
+            AppResult.Error(Exception("No data Error"))
+        }
+    }
+
+    override suspend fun getRecommendedMovies(
+        filterType: String,
+        page: Int
+    ): AppResult<MovieResponse> {
         if (isToThrowException) throw Exception("Network Error")
         val apiResponse = TestData.movieApiModel1
 

@@ -49,7 +49,7 @@ class MovieListRepositoryImpl(
                 val response = when (type) {
                     is MovieType.Upcoming -> api.getUpcoming(page)
                     is MovieType.Trends -> api.getTrends(page)
-                    is MovieType.Recommended -> when(filterType){
+                    is MovieType.Recommended -> when (filterType) {
                         "language" -> api.getRecommendedByLanguage(page)
                         "year" -> api.getRecommendedByYear(page)
                         else -> api.getRecommended(page)

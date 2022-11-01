@@ -19,5 +19,7 @@ fun RecyclerView.submitMovieItems(movieList: List<Movie>?) {
 fun ImageView.setImageUrl(uri: String?) {
     Glide.with(this.context)
         .load(uri)
+        //.skipMemoryCache(true)
+        .onlyRetrieveFromCache(false)
         .into(this)
 }

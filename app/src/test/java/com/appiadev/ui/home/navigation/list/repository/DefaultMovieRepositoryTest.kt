@@ -27,7 +27,7 @@ class DefaultMovieRepositoryTest {
 
     @Before
     fun setup() = coroutineRule.runBlockingTest {
-        Mockito.`when`(movieService.getAllMovies(page)).thenReturn(Response.success(TestData.movieApiModel1))
+        Mockito.`when`(movieService.getRecommended(1)).thenReturn(Response.success(TestData.movieApiModel1))
     }
 
     @Test
